@@ -1,17 +1,25 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 
-const uploadOnCloudinary = async (localFilePath) => {
+const cloudinaryConfig = () => {
   cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
   });
+};
+
+const uploadOnCloudinary = async (
+  localFilePath,
+  options = {
+    resource_type: "auto",
+    folder: 'playHub',
+  }
+) => {
+  cloudinaryConfig();
   try {
     if (!localFilePath) return;
-    const response = await cloudinary.uploader.upload(localFilePath, {
-      resource_type: "auto",
-    });
+    const response = await cloudinary.uploader.upload(localFilePath, options);
     fs.unlinkSync(localFilePath);
     return response;
   } catch (error) {
@@ -19,15 +27,15 @@ const uploadOnCloudinary = async (localFilePath) => {
     return null;
   }
 };
-const deleteOnCloudinary = async (publicId) => {
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-  });
+const deleteOnCloudinary = async (publicId, type = "auto") => {
+  // console.log([...publicId]);
+  cloudinaryConfig();
   try {
     if (!publicId) return;
-    const response = await cloudinary.uploader.destroy(publicId);
+    const response = await cloudinary.uploader.destroy(publicId, {
+      resource_type: type,
+      folder:"playHub"
+    });
     return response;
   } catch (error) {
     return null;

@@ -2,9 +2,9 @@ import {
   ApiError,
   ApiResponse,
   asyncHandler,
-  // uploadOnCloudinary,
+  uploadOnCloudinary,
+  deleteOnCloudinary,
 } from "../utils/index.js";
-import { deleteOnCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
